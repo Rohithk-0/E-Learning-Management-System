@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Add Trainer{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Add Trainer</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label>Username</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+        <button class="btn btn-primary">Add Trainer</button>
+    </form>
+</div>
+{% endblock %}

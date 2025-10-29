@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Student Feedback{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>📝 Student Feedback</h2>
+
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label class="form-label">Filter by Course</label>
+            <select name="course" class="form-select">
+                <option value="">All Courses</option>
+                {% for course in courses %}
+                    <option value="{{ course.id }}" {% if course.id|stringformat:"s" == selected_course %}selected{% endif %}>
+                        {{ course.title }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Minimum Rating</label>
+            <select name="min_rating" class="form-select">
+                <option value="">Any</option>
+                {% for i in "54321" %}
+                    <option value="{{ i }}" {% if i == selected_rating %}selected{% endif %}>{{ i }}+</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2 align-self-end">
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </div>
+    </form>
+    <a href="{% url 'export_feedback' %}?course={{ selected_course }}&min_rating={{ selected_rating }}" class="btn btn-success mb-3">
+        <i class="bi bi-download"></i> Export to CSV
+    </a>
+    
+
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Student</th>
+                <th>Course</th>
+                <th>Trainer</th>
+                <th>Rating</th>
+                <th>Feedback</th>
+                <th>Submitted At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rating in ratings %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ rating.student.username }}</td>
+                    <td>{{ rating.course.title }}</td>
+                    <td>{{ rating.course.trainer.user.username }}</td>
+                    <td>{{ rating.rating }}</td>
+                    <td>{{ rating.feedback|default:"—" }}</td>
+                    <td>{{ rating.created_at|date:"d M Y, h:i A" }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="7">No feedback found for the selected filters.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

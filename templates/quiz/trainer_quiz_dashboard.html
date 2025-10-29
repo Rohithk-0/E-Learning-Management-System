@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Trainer Quiz Overview{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>📈 Quiz Attempts by Students</h3>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Quiz</th>
+                <th>Score</th>
+                <th>Attempts</th>
+                <th>Last Attempt</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for attempt in attempts %}
+            <tr>
+                <td>{{ attempt.student.username }}</td>
+                <td>{{ attempt.quiz.title }}</td>
+                <td>{{ attempt.score }}/{{ attempt.total }}</td>
+                <td>{{ attempt.attempts }}</td>
+                <td>{{ attempt.last_attempt|date:"Y-m-d H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

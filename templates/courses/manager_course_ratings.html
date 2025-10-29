@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Course Ratings Analytics{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>📊 Course Ratings Analytics</h2>
+    <table class="table table-bordered table-hover mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Course</th>
+                <th>Trainer</th>
+                <th>Average Rating</th>
+                <th>Total Ratings</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ course.title }}</td>
+                    <td>{{ course.trainer.user.username }}</td>
+                    <td>
+                        {% with avg=course.avg_rating %}
+    {% for i in "12345" %}
+        {% with i_float=i|stringformat:"d"|add:"0"|floatformat:1 %}
+            {% if avg|floatformat:1 >= i %}
+                <i class="bi bi-star-fill text-warning"></i>
+            {% elif avg|floatformat:1 >= i|add:"-0.5"|stringformat:"s" %}
+                <i class="bi bi-star-half text-warning"></i>
+            {% else %}
+                <i class="bi bi-star text-warning"></i>
+            {% endif %}
+        {% endwith %}
+    {% endfor %}
+    <span class="ms-2">({{ avg|default:"N/A"|floatformat:1 }})</span>
+{% endwith %}
+
+                    </td>
+                    <td>{{ course.total_ratings }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5">No ratings yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

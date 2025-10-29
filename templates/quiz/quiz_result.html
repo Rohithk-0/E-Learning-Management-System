@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Quiz Result{% endblock %}
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2>📝 {{ quiz.title }} - Result</h2>
+    <h4>Score: <strong>{{ score }}/{{ total }}</strong></h4>
+    <h5>Percentage: {{ percent }}%</h5>
+</div>
+{% endblock %}

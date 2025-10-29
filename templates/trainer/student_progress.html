@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Student Progress{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>📊 Student Progress Report</h2>
+
+    {% for entry in data %}
+        <h4 class="mt-4 text-primary">{{ entry.course.title }}</h4>
+        <table class="table table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th>Student</th>
+                    <th>Progress</th>
+                    <th style="width: 40%;">Progress Bar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in entry.students %}
+                <tr>
+                    <td>{{ student.student.username }}</td>
+                    <td>{{ student.percent }}%</td>
+                    <td>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar"
+                                 style="width: {{ student.percent }}%;"
+                                 aria-valuenow="{{ student.percent }}"
+                                 aria-valuemin="0" aria-valuemax="100">
+                                {{ student.percent }}%
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3">No students enrolled.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% empty %}
+        <p>No courses assigned yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

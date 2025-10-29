@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Browse Courses{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Available Courses</h2>
+
+    <div class="row">
+        {% for course in courses %}
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5>{{ course.title }}</h5>
+                        <small>⭐ {{ course.average_course_rating }}/5</small>
+                        <p>{{ course.description }}</p>
+                        <p><strong>Price:</strong> ₹{{ course.price }}</p>
+
+                        {% if course.id in purchased %}
+                            <a href="{% url 'course_videos' course.id %}" class="btn btn-success">Access Course</a>
+                        {% else %}
+                            <a href="{% url 'buy_course' course.id %}" class="btn btn-primary">Buy</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

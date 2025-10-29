@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}All Purchases{% endblock %}
+{% block content %}
+<h2 class="mb-4">🧾 All Purchases</h2>
+
+<form method="get" class="row g-3 mb-4">
+    <div class="col-md-4">
+        <label>Start Date</label>
+        <input type="date" name="start" value="{{ start_date }}" class="form-control">
+    </div>
+    <div class="col-md-4">
+        <label>End Date</label>
+        <input type="date" name="end" value="{{ end_date }}" class="form-control">
+    </div>
+    <div class="col-md-4 d-flex align-items-end">
+        <button class="btn btn-primary w-100">Filter</button>
+    </div>
+</form>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Student</th>
+            <th>Course</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Purchased On</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for purchase in purchases %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ purchase.student.username }}</td>
+            <td>{{ purchase.course.title }}</td>
+            <td>₹{{ purchase.amount }}</td>
+            <td>
+                <span class="badge bg-success">{{ purchase.status }}</span>
+            </td>
+            <td>{{ purchase.timestamp|date:"Y-m-d H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center">No purchases found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

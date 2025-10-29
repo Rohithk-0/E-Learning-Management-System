@@ -1,0 +1,186 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
+
+
+    <!-- Style -->
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+
+    <title>Multiple user login</title>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow">
+            <h3 class="text-center">Register</h3>
+            <form method="post" novalidate>
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="id_username">Username</label>
+                <input type="text" name="username" class="form-control" id="id_username" placeholder="Enter username" required>
+              </div>
+    
+              <div class="form-group">
+                <label for="id_email">Email</label>
+                <input type="email" name="email" class="form-control" id="id_email" placeholder="Enter email" required>
+              </div>
+    
+              <div class="form-group">
+                <label for="id_password1">Password</label>
+                <input type="password" name="password1" class="form-control" id="id_password1" placeholder="Enter password" required>
+              </div>
+    
+              <div class="form-group">
+                <label for="id_password2">Confirm Password</label>
+                <input type="password" name="password2" class="form-control" id="id_password2" placeholder="Confirm password" required>
+              </div>
+
+              
+               <!-- 🌍 Country Dropdown -->
+  <div class="form-group">
+    <label for="id_country">Country</label>
+    <select name="country" class="form-control" id="id_country" required>
+      <option value="">Select Country</option>
+      {% for country in countries %}
+        <option value="{{ country.id }}">{{ country.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <!-- 🏙️ State Dropdown -->
+  <div class="form-group">
+    <label for="id_state">State</label>
+    <select name="state" class="form-control" id="id_state" required>
+      <option value="">Select State</option>
+    </select>
+  </div>
+
+  <!-- 🏘️ District Dropdown -->
+  <div class="form-group">
+    <label for="id_district">District</label>
+    <select name="district" class="form-control" id="id_district" required>
+      <option value="">Select District</option>
+    </select>
+  </div>
+
+  <!-- 🔐 Passkey input (hidden by default) -->
+<div id="passkey-container" class="form-group mt-3" style="display: none;">
+  <label for="id_passkey">Enter Passkey</label>
+  <input type="password" name="passkey" class="form-control" id="id_passkey" placeholder="Enter secret passkey">
+</div>
+
+
+    
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="is_manager" id="id_is_manager">
+                <label class="form-check-label" for="id_is_manager">Manager</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" name="is_student" id="id_is_student">
+                <label class="form-check-label" for="id_is_student">Student</label>
+              </div>
+              <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" name="is_trainer" id="id_is_trainer">
+                <label class="form-check-label" for="id_is_trainer">Trainer</label>
+              </div>
+    
+              {% if form.errors %}
+                <div class="alert alert-danger">
+                  {{ form.errors }}
+                </div>
+              {% endif %}
+    
+              <button type="submit" class="btn btn-primary btn-block">Register</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $('#id_country').change(function () {
+    const countryId = $(this).val();
+    if (countryId) {
+      $.ajax({
+        url: "{% url 'ajax_load_states' %}",
+        data: {
+          'country_id': countryId
+        },
+        success: function (data) {
+          $('#id_state').html('<option value="">Select State</option>');
+          $('#id_district').html('<option value="">Select District</option>');
+          data.forEach(function (item) {
+            $('#id_state').append(`<option value="${item.id}">${item.name}</option>`);
+          });
+        }
+      });
+    } else {
+      $('#id_state').html('<option value="">Select State</option>');
+      $('#id_district').html('<option value="">Select District</option>');
+    }
+  });
+
+  $('#id_state').change(function () {
+    const stateId = $(this).val();
+    if (stateId) {
+      $.ajax({
+        url: "{% url 'ajax_load_districts' %}",
+        data: {
+          'state_id': stateId
+        },
+        success: function (data) {
+          $('#id_district').html('<option value="">Select District</option>');
+          data.forEach(function (item) {
+            $('#id_district').append(`<option value="${item.id}">${item.name}</option>`);
+          });
+        }
+      });
+    } else {
+      $('#id_district').html('<option value="">Select District</option>');
+    }
+  });
+
+  $(document).ready(function () {
+    const roleCheckboxes = ['#id_is_manager', '#id_is_trainer', '#id_is_student'];
+  
+    function handleRoleToggle(clickedId) {
+      const isChecked = $(clickedId).is(':checked');
+  
+      roleCheckboxes.forEach(id => {
+        if (id !== clickedId) {
+          $(id).prop('disabled', isChecked); // disable/enable others
+          $(id).css('opacity', isChecked ? 0.5 : 1); // blur effect
+        }
+      });
+  
+      // Toggle passkey visibility for Manager/Trainer only
+      if ($('#id_is_manager').is(':checked') || $('#id_is_trainer').is(':checked')) {
+        $('#passkey-container').show();
+      } else {
+        $('#passkey-container').hide();
+      }
+    }
+  
+    // Attach to each role checkbox
+    roleCheckboxes.forEach(id => {
+      $(id).change(function () {
+        handleRoleToggle(id);
+      });
+    });
+  });
+</script>
+
+    
+      
+  </body>
+</html>

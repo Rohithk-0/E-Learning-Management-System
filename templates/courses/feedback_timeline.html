@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Feedback Timeline{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>📅 Feedback Timeline</h2>
+    <canvas id="lineChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('lineChart').getContext('2d');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ labels|safe }},
+        datasets: [
+            {
+                label: 'Average Rating',
+                data: {{ ratings|safe }},
+                borderColor: '#4CAF50',
+                backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                tension: 0.3,
+                yAxisID: 'y',
+            },
+            {
+                label: 'Total Reviews',
+                data: {{ counts|safe }},
+                borderColor: '#2196F3',
+                backgroundColor: 'rgba(33, 150, 243, 0.2)',
+                tension: 0.3,
+                yAxisID: 'y1',
+            }
+        ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: { display: true, text: 'Avg Rating' }
+            },
+            y1: {
+                beginAtZero: true,
+                position: 'right',
+                title: { display: true, text: 'Review Count' },
+                grid: { drawOnChartArea: false }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Edit Trainer Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Your Profile</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.skype.label_tag }}
+                {{ form.skype }}<br>
+
+                {{ form.whatsapp.label_tag }}
+                {{ form.whatsapp }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form.profile_pic.label_tag }}
+                {{ form.profile_pic }}
+                {% if form.instance.profile_pic %}
+                    <img src="{{ form.instance.profile_pic.url }}" class="img-thumbnail mt-2" width="150">
+                {% endif %}
+            </div>
+        </div>
+
+        <button class="btn btn-primary mt-3" type="submit">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

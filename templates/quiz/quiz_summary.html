@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Quiz Summary{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>📋 Quiz Summary: {{ quiz.title }}</h3>
+    <p><strong>Course:</strong> {{ quiz.course.title }}</p>
+    <p><strong>Video:</strong> {% if quiz.video %}{{ quiz.video.title }}{% else %}N/A{% endif %}</p>
+
+    <p><strong>Duration:</strong> {{ quiz.duration }} minutes</p>
+    <p><strong>Max Attempts:</strong> {{ quiz.max_attempts }}</p>
+
+    <hr>
+
+    <h4>Questions:</h4>
+    {% for q in questions %}
+        <div class="mb-3">
+            <strong>Q{{ forloop.counter }}: {{ q.text }}</strong>
+            <ul>
+                {% for c in q.choices.all %}
+                    <li{% if c.is_correct %} style="color: green;"{% endif %}>
+                        {{ c.text }} {% if c.is_correct %}✅{% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% empty %}
+        <p>No questions added yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}All Trainers{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Our Trainers</h2>
+    <div class="row">
+        {% for trainer in trainers %}
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm rounded-3">
+                <img src="{{ trainer.profile_pic.url }}" class="card-img-top" height="200" style="object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ trainer.user.username }}</h5>
+
+                    {% if trainer.average_rating %}
+                        <div class="mb-2">
+                            {% with trainer.average_rating as avg %}
+                                {% for i in "12345" %}
+                                    {% if avg|floatformat:1 >= i|add:""|floatformat:1 %}
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                    {% elif avg|floatformat:1 >= i|add:"-0.5"|floatformat:1 %}
+                                        <i class="bi bi-star-half text-warning"></i>
+                                    {% else %}
+                                        <i class="bi bi-star text-warning"></i>
+                                    {% endif %}
+                                {% endfor %}
+                                <small class="text-muted">({{ avg|floatformat:1 }})</small>
+                            {% endwith %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-2">No ratings yet</p>
+                    {% endif %}
+
+                    <a href="{% url 'trainer_detail' trainer.id %}" class="btn btn-primary btn-sm">View Profile</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

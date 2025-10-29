@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Add Question{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Add Question to "{{ quiz.title }}"</h3>
+
+    {% if total %}
+  <p class="text-primary"><strong>{{ added }} out of {{ total }} questions added</strong></p>
+{% endif %}
+
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label>Question</label>
+            <input type="text" name="question" class="form-control" required>
+        </div>
+
+        {% for i in "1234" %}
+        <div class="mb-3">
+            <label>Choice {{ i }}</label>
+            <input type="text" name="choice{{ i }}" class="form-control" required>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="correct" value="{{ i }}" required>
+                <label class="form-check-label">Mark as correct</label>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="d-flex justify-content-between align-items-center">
+            <button type="submit" class="btn btn-success">➕ Add Question</button>
+            {% if total %}
+            <a href="{% url 'quiz_summary' quiz.id %}" class="btn btn-secondary">✅ Complete</a>
+            {% endif %}
+        </div>
+        
+    </form>
+</div>
+{% endblock %}

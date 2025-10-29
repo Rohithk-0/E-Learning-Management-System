@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Your Profile</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ user_form.username.label_tag }}
+                    {{ user_form.username }}
+                </div>
+                
+                <div class="mb-3">
+                    {{ user_form.first_name.label_tag }}
+                    {{ user_form.first_name }}
+                </div>
+                <div class="mb-3">
+                    {{ user_form.last_name.label_tag }}
+                    {{ user_form.last_name }}
+                </div>
+                <div class="mb-3">
+                    {{ user_form.email.label_tag }}
+                    {{ user_form.email }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ profile_form.bio.label_tag }}
+                    {{ profile_form.bio }}
+                </div>
+                <div class="mb-3">
+                    {{ profile_form.profile_pic.label_tag }}
+                    {{ profile_form.profile_pic }}
+                    {% if user.studentprofile.profile_pic %}
+                        <img src="{{ user.studentprofile.profile_pic.url }}" class="img-thumbnail mt-2" width="150">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-primary mt-3" type="submit">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

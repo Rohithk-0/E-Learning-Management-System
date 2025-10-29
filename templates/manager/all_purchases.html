@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}All Purchases{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>All Course Purchases</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Course</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in purchases %}
+            <tr>
+                <td>{{ p.student.username }}</td>
+                <td>{{ p.course.title }}</td>
+                <td>{{ p.purchased_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            text-align: center;
+            padding: 60px;
+            border: 10px solid #007bff;
+        }
+        h1 {
+            font-size: 40px;
+        }
+        p {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Certificate of Completion</h1>
+    <p>This certifies that</p>
+    <h2>{{ student.get_full_name|default:student.username }}</h2>
+    <p>has successfully completed</p>
+    <h2>{{ course.title }}</h2>
+    <p>Date: {{ now|date:"F d, Y" }}</p>
+</body>
+</html>

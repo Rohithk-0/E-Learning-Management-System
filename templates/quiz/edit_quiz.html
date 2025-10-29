@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Edit Quiz{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Quiz</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Update</button>
+        {% if request.user.is_manager %}
+  <a href="{% url 'manager_quiz_list' %}" class="btn btn-secondary">Cancel</a>
+{% else %}
+  <a href="{% url 'trainer_quiz_dashboard' %}" class="btn btn-secondary">Cancel</a>
+{% endif %}
+
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Add Course{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Add Course</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label>Course Title</label>
+            <input type="text" name="title" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Description</label>
+            <textarea name="description" class="form-control" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label>Price (₹)</label>
+            <input type="number" name="price" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label>Assign Trainer</label>
+            <select name="trainer" class="form-control">
+                {% for t in trainers %}
+                    <option value="{{ t.id }}">{{ t.user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-success">Add Course</button>
+    </form>
+</div>
+{% endblock %}

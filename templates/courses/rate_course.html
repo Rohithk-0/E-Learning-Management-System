@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Rate Course{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Rate: {{ course.title }}</h3>
+    <form method="post">
+        {% csrf_token %}
+        <label for="rating" class="form-label">Rating (1 to 5)</label>
+        <select name="rating" class="form-select mb-3" required>
+            <option value="">Select rating</option>
+            {% for i in "12345" %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="feedback" class="form-label">Feedback (optional)</label>
+        <textarea name="feedback" rows="4" class="form-control mb-3"></textarea>
+
+        <button type="submit" class="btn btn-primary">Submit Rating</button>
+    </form>
+</div>
+{% endblock %}

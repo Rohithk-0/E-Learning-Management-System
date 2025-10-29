@@ -1,0 +1,56 @@
+{% comment %} <!-- Sidebar (Offcanvas) -->
+{% load static %}
+
+
+
+  <div class="offcanvas-body p-0">
+    <!-- Brand and Role Display -->
+    <div class="text-center py-4 border-bottom">
+      <img src="{% static 'images/home.svg' %}" alt="SkyLearn" width="180">
+      <p class="mt-2 small">
+        <mark class="bg-secondary text-light px-2 py-1 rounded">
+          {{ request.user.get_user_role }}
+        </mark>
+      </p>
+    </div>
+
+    <!-- Navigation -->
+    <ul class="nav flex-column px-3 py-3">
+
+      {% if user.role == 'student' %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'browse_courses' %}"><i class="bi bi-bag-plus"></i> Browse Courses</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'my_purchases' %}"><i class="bi bi-cart-check"></i> My Purchases</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'top_rated_videos' %}"><i class="bi bi-star-half"></i> Top Rated</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'trainer_courses' %}"><i class="bi bi-journal-check"></i> My Courses</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'trainer_video_feedback' %}"><i class="bi bi-chat-square-quote"></i> Video Feedback</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'trainer_video_list' %}"><i class="bi bi-collection-play"></i> My Videos</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'student' %}"><i class="bi bi-bar-chart-line"></i> My Progress</a></li>
+
+      {% elif user.role == 'trainer' %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'trainer_students' %}"><i class="bi bi-people"></i> My Students</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-cloud-upload"></i> Upload Videos</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'trainer_student_progress' %}"><i class="bi bi-person-lines-fill"></i> Student Progress</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-people"></i> Student Reports</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'trainer_feedback' %}"><i class="bi bi-chat-dots"></i> Video Feedback</a></li>
+
+      {% elif user.role == 'manager' %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'manager' %}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'all_feedback' %}"><i class="bi bi-chat-left-text"></i> Feedback</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'all_purchases' %}"><i class="bi bi-receipt"></i> Purchases</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'student_progress' %}"><i class="bi bi-bar-chart-line"></i> Progress</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-plus-circle"></i> Add Courses</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'manager_course_ratings' %}"><i class="bi bi-bar-chart-line"></i> Course Analytics</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person-badge"></i> Manage Trainers</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'assign_trainer' %}"><i class="bi bi-person-check"></i> Assign Trainer</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'manager_feedback' %}"><i class="bi bi-chat-dots"></i> Student Feedback</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'feedback_charts' %}"><i class="bi bi-pie-chart"></i> Feedback Charts</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'feedback_timeline' %}"><i class="bi bi-graph-up"></i> Rating Timeline</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'trainer_performance' %}"><i class="bi bi-bar-chart-steps"></i> Trainer Performance</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'low_rated_trainers' %}"><i class="bi bi-exclamation-triangle"></i> Low Ratings</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'student_progress_report' %}"><i class="bi bi-bar-chart-line"></i> Progress Report</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'manage_student_progress' %}"><i class="bi bi-arrow-counterclockwise"></i> Reset Progress</a></li>
+      {% endif %}
+
+    </ul>
+  </div>
+</div>   {% endcomment %}

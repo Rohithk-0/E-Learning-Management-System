@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}All Trainer Feedback{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>All Trainer Feedback</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Trainer</th>
+                <th>Student</th>
+                <th>Rating</th>
+                <th>Comment</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fb in feedbacks %}
+            <tr>
+                <td>{{ fb.trainer.user.username }}</td>
+                <td>{{ fb.student.username }}</td>
+                <td>{{ fb.rating }} ⭐</td>
+                <td>{{ fb.comment }}</td>
+                <td>{{ fb.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

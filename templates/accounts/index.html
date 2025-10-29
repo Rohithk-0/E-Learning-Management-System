@@ -1,0 +1,33 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome | Multi-User Login</title>
+
+    <!-- Custom CSS only -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+  <body>
+
+    <div class="content">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6 contents">
+            <div class="form-block text-center">
+              <h2 class="mb-4">Welcome Mr. Django</h2>
+
+              <p>Already have an account?</p>
+              <a href="{% url 'login_view' %}" class="btn btn-primary btn-block">Login</a>
+
+              <p class="mt-4">New here?</p>
+              <a href="{% url 'register' %}" class="btn btn-outline-primary btn-block">Register</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

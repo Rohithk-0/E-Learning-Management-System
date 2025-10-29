@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}{{ course.title }} Videos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ course.title }} – Videos</h2>
+
+    <!-- ⭐ Styles -->
+    <style>
+        .bi-star-fill, .bi-star-half {
+            color: gold;
+        }
+        .play-overlay {
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        .video-thumbnail-container:hover .play-overlay {
+            opacity: 1;
+        }
+    </style>
+
+    <!-- 📊 Progress Bar -->
+    <div class="progress my-3">
+        <div class="progress-bar" role="progressbar"
+             style="width: {{ progress }}%;"
+             aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100">
+            {{ progress }}%
+        </div>
+    </div>
+
+    <!-- 📝 Quiz Button -->
+    {% if quiz %}
+    <a href="{% url 'take_quiz' quiz.id %}" class="btn btn-warning btn-sm mt-2">
+        📝 Take Course Quiz
+    </a>
+    {% endif %}
+
+    <!-- 🧾 Certificate Button -->
+    {% if progress == 100 %}
+    <a href="{% url 'download_certificate' course.id %}" class="btn btn-success mt-2">
+        🧾 Download Certificate
+    </a>
+    {% endif %}
+
+    <!-- 🎥 Video Cards -->
+    {% for video in videos %}
+    <div class="card mb-4 shadow-sm rounded-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ video.title }}</h5>
+
+            <!-- 🎬 Video Thumbnail with Link -->
+            {% if video.video_url %}
+            <div class="video-thumbnail-container position-relative mb-3" style="max-width: 560px;">
+                <a href="{% url 'watch_video' video.id %}" target="_blank" class="d-block position-relative">
+                    <img src="https://img.youtube.com/vi/{{ video.video_url|cut:'https://youtu.be/' }}/0.jpg"
+                         class="img-fluid rounded shadow-sm"
+                         alt="{{ video.title }} thumbnail">
+                    <div class="play-overlay position-absolute top-50 start-50 translate-middle text-white text-center">
+                        <i class="bi bi-play-circle-fill" style="font-size: 4rem;"></i>
+                    </div>
+                </a>
+                <p class="text-muted mt-2">Duration: {{ video.duration_minutes }} min</p>
+            </div>
+            {% else %}
+            <p class="text-danger">No video link available.</p>
+            {% endif %}
+
+            <!-- 📥 Download Resource -->
+            {% if video.resource %}
+            <a href="{{ video.resource.url }}" class="btn btn-sm btn-success mb-2" download>
+                📥 Download Resource
+            </a>
+            {% endif %}
+
+            <!-- ⭐ Average Rating -->
+            <div class="mt-2">
+                <strong>Average Rating:</strong>
+                {% if video.average_rating %}
+                    {% with avg=video.average_rating %}
+                        {% for i in "12345" %}
+                            {% if avg|floatformat:1 >= i|add:"0.0"|floatformat:1 %}
+                                <i class="bi bi-star-fill text-warning"></i>
+                            {% elif avg|floatformat:1 >= i|add:"-0.5"|floatformat:1 %}
+                                <i class="bi bi-star-half text-warning"></i>
+                            {% else %}
+                                <i class="bi bi-star text-muted"></i>
+                            {% endif %}
+                        {% endfor %}
+                        <small class="text-muted ms-1">({{ avg }}/5)</small>
+                    {% endwith %}
+                {% else %}
+                    <span class="text-muted">Not rated yet.</span>
+                {% endif %}
+            </div>
+
+            <!-- 📝 Student Feedback Form or Result -->
+            {% if video.rating_obj %}
+                <p class="mt-2"><strong>Your Rating:</strong> {{ video.rating_obj.rating }} ⭐</p>
+                <p><strong>Your Feedback:</strong> {{ video.rating_obj.feedback }}</p>
+            {% else %}
+                <form method="post" class="rating-form mt-3 d-flex flex-column gap-2" data-video-id="{{ video.id }}">
+                    {% csrf_token %}
+                    <input type="hidden" name="video_id" value="{{ video.id }}">
+                    {{ form.rating }}
+                    {{ form.feedback }}
+                    <button type="submit" class="btn btn-primary btn-sm">Complete + Rate</button>
+                </form>
+                <div class="rating-result-{{ video.id }} mt-1"></div>
+            {% endif %}
+
+            <!-- ✅ Mark as Completed -->
+            <form method="post" class="complete-form mt-2" data-video-id="{{ video.id }}">
+                {% csrf_token %}
+                <input type="hidden" name="video_id" value="{{ video.id }}">
+                <button type="submit" class="btn btn-outline-primary btn-sm">Mark as Completed</button>
+            </form>
+            <div class="complete-result-{{ video.id }} mt-1"></div>
+
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- 👨‍🏫 Trainer Info -->
+    <p class="text-muted mt-4">
+        <i class="bi bi-person-circle"></i>
+        <strong>Trainer:</strong>
+        {{ course.trainer.user.get_full_name|default:course.trainer.user.username }}
+    </p>
+</div>
+
+<!-- 💡 jQuery + AJAX Form Handler -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+
+    // Rating Submission
+    $('.rating-form').submit(function (e) {
+        e.preventDefault();
+        const form = $(this);
+        const videoId = form.data('video-id');
+        $.ajax({
+            type: 'POST',
+            url: '{% url "rate_video_ajax" %}',
+            data: form.serialize(),
+            success: function (response) {
+                $(`.rating-result-${videoId}`).html('<span class="text-success">✅ Feedback submitted!</span>');
+            },
+            error: function () {
+                $(`.rating-result-${videoId}`).html('<span class="text-danger">❌ Error submitting feedback.</span>');
+            }
+        });
+    });
+
+    // Completion Submission
+    $('.complete-form').submit(function (e) {
+        e.preventDefault();
+        const form = $(this);
+        const videoId = form.data('video-id');
+        $.ajax({
+            type: 'POST',
+            url: '{% url "mark_completed_ajax" %}',
+            data: form.serialize(),
+            success: function () {
+                $(`.complete-result-${videoId}`).html('<span class="text-success">✅ Marked as completed!</span>');
+                form.remove();
+            },
+            error: function () {
+                $(`.complete-result-${videoId}`).html('<span class="text-danger">❌ Error marking complete.</span>');
+            }
+        });
+    });
+
+});
+</script>
+{% endblock %}
+
+
+

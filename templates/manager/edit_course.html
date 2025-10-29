@@ -1,0 +1,44 @@
+
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+
+{% block title %}Edit Course – {{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Edit Course – {{ course.title }}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="mb-3">
+            <label for="id_title">Course Title</label>
+            {{ form.title|add_class:"form-control" }}
+            {{ form.title.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_description">Description</label>
+            {{ form.description|add_class:"form-control" }}
+            {{ form.description.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_price">Price (₹)</label>
+            {{ form.price|add_class:"form-control" }}
+            {{ form.price.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_trainer">Assign Trainer</label>
+            {{ form.trainer|add_class:"form-control" }}
+            {{ form.trainer.errors }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Course</button>
+        <a href="{% url 'manage_courses' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% for course in courses %}
+  <div>
+    <h3>{{ course.title }}</h3>
+    <small>⭐ {{ course.average_course_rating }}/5</small>
+    <p>{{ course.description }}</p>
+    <p>Trainer: {{ course.trainer.user.username }}</p>
+    <a href="{% url 'course_videos' course.id %}">View Videos</a>
+  </div>
+{% endfor %}

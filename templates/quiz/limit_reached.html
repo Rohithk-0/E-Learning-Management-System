@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Attempt Limit Reached{% endblock %}
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2>You've reached the maximum number of attempts for this quiz.</h2>
+    <p><strong>{{ quiz.title }}</strong> (Max attempts: {{ quiz.max_attempts }})</p>
+    <a href="{% url 'student' %}" class="btn btn-primary mt-3">Back to Dashboard</a>
+</div>
+{% endblock %}

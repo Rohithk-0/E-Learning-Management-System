@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Top Rated Videos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">🏆 Top Rated Videos</h2>
+
+    {% for video in top_videos %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>{{ video.title }}</h5>
+                <p class="mb-1"><strong>Course:</strong> {{ video.course.title }}</p>
+                <p class="mb-2"><strong>Trainer:</strong> {{ video.course.trainer.user.username }}</p>
+                <div>
+                    {% with avg=video.average_rating %}
+    {% for i in "12345" %}
+        {% if avg|floatformat:"1" >= forloop.counter %}
+            <i class="bi bi-star-fill text-warning"></i>
+        {% elif avg|floatformat:"1" >= forloop.counter0|add:"0.5" %}
+            <i class="bi bi-star-half text-warning"></i>
+        {% else %}
+            <i class="bi bi-star text-warning"></i>
+        {% endif %}
+    {% endfor %}
+    <span class="ms-2 text-muted">({{ avg }}/5)</span>
+{% endwith %}
+
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>No videos rated yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

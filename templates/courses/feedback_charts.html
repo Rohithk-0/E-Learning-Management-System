@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}Feedback Charts{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">📊 Student Feedback Overview</h2>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Chart.js Config -->
+<script>
+    const labels = {{ labels|safe }};
+    const data = {{ data|safe }};
+
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
+    const barCtx = document.getElementById('barChart').getContext('2d');
+
+    new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Rating Distribution',
+                data: data,
+                backgroundColor: ['#4CAF50', '#8BC34A', '#FFC107', '#FF9800', '#F44336']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Ratings',
+                data: data,
+                backgroundColor: '#007bff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+<!-- Canvas sizing -->
+<style>
+    canvas {
+        width: 100% !important;
+        height: 400px !important;
+    }
+</style>
+{% endblock %}

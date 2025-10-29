@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}My Purchases{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>My Purchased Courses</h2>
+
+    {% if payments %}
+        <div class="row">
+            {% for payment in payments %}
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5>{{ payment.course.title }}</h5>
+                            <p><strong>Price:</strong> ₹{{ payment.amount }}</p>
+                            <p><strong>Status:</strong> {{ payment.status }}</p>
+                            <a href="{% url 'course_videos' payment.course.id %}" class="btn btn-success btn-sm">Watch Videos</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You haven't purchased any courses yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

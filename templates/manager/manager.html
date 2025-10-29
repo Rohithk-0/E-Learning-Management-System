@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block title %}Manager Dashboard{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+
+  <!-- 🧑‍💼 Header -->
+  <div class="text-center mb-5">
+    <h1 class="display-6 fw-bold text-primary"><i class="bi bi-briefcase-fill me-2"></i>Manager Dashboard</h1>
+    <p class="text-muted">Monitor, manage, and maintain your platform ecosystem.</p>
+  </div>
+
+  <!-- 📊 Summary Cards -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center hover-shadow">
+        <div class="card-body">
+          <i class="bi bi-people-fill fs-2 text-primary"></i>
+          <h6 class="mt-2 text-muted">Total Students</h6>
+          <h3 class="fw-bold text-primary">{{ total_students }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center hover-shadow">
+        <div class="card-body">
+          <i class="bi bi-journal-text fs-2 text-success"></i>
+          <h6 class="mt-2 text-muted">Total Courses</h6>
+          <h3 class="fw-bold text-success">{{ total_courses }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center hover-shadow">
+        <div class="card-body">
+          <i class="bi bi-cart-check fs-2 text-info"></i>
+          <h6 class="mt-2 text-muted">Purchases</h6>
+          <h3 class="fw-bold text-info">{{ total_purchases }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm text-center hover-shadow">
+        <div class="card-body">
+          <i class="bi bi-bar-chart-line fs-2 text-warning"></i>
+          <h6 class="mt-2 text-muted">Avg. Progress</h6>
+          <h3 class="fw-bold text-warning">{{ avg_progress }}%</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ➕ Quick Actions -->
+  <div class="mb-5 d-flex flex-wrap justify-content-center gap-3">
+    <a href="{% url 'add_trainer' %}" class="btn btn-outline-primary shadow-sm">
+      <i class="bi bi-person-plus me-1"></i> Add Trainer
+    </a>
+    <a href="{% url 'add_course' %}" class="btn btn-outline-success shadow-sm">
+      <i class="bi bi-journal-plus me-1"></i> Add Course
+    </a>
+    <a href="{% url 'add_video' %}" class="btn btn-outline-warning text-dark shadow-sm">
+      <i class="bi bi-camera-reels me-1"></i> Add Video
+    </a>
+  </div>
+
+  <!-- 👨‍🎓 Students -->
+  <div class="mb-5">
+    <h4 class="mb-3 text-primary"><i class="bi bi-people-fill me-2"></i>Students</h4>
+    <ul class="list-group shadow-sm">
+      {% for s in students %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-person-circle text-primary me-2"></i>{{ s.username }}</span>
+          <span class="badge bg-secondary">{{ s.email }}</span>
+        </li>
+      {% empty %}
+        <li class="list-group-item text-muted">No students available.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- 👨‍🏫 Trainers -->
+  <div class="mb-5">
+    <h4 class="mb-3 text-success"><i class="bi bi-person-workspace me-2"></i>Trainers</h4>
+    <ul class="list-group shadow-sm">
+      {% for t in trainers %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-person-badge-fill text-success me-2"></i>{{ t.user.username }}</span>
+          <span class="badge bg-dark">{{ t.user.email }}</span>
+        </li>
+      {% empty %}
+        <li class="list-group-item text-muted">No trainers available.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- 📘 Courses -->
+  <div class="mb-5">
+    <h4 class="mb-3 text-info"><i class="bi bi-book-half me-2"></i>Courses</h4>
+    <ul class="list-group shadow-sm">
+      {% for c in courses %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <i class="bi bi-journal-bookmark-fill text-info me-2"></i>{{ c.title }}
+            <small class="text-muted">by {{ c.trainer.user.username }}</small>
+          </div>
+          <span class="badge bg-success">₹{{ c.price }}</span>
+        </li>
+      {% empty %}
+        <li class="list-group-item text-muted">No courses added yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block js %}
+<style>
+  .hover-shadow:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+    transition: box-shadow 0.3s ease-in-out;
+  }
+</style>
+{% endblock %}

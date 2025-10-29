@@ -1,0 +1,55 @@
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+  
+      <!-- Sidebar Toggle (for mobile) -->
+      <button class="btn btn-outline-light d-lg-none me-2"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasSidebar"
+              aria-controls="offcanvasSidebar">
+        <i class="bi bi-list"></i>
+      </button>
+  
+      <!-- Brand Name -->
+      <a class="navbar-brand" href="#">E-Learning</a>
+  
+      <!-- Collapsible Area -->
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+  
+          {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+               
+              {% if user.is_student and user.studentprofile.profile_pic %}
+                <img src="{{ user.studentprofile.profile_pic.url }}" class="rounded-circle me-2" width="32" height="32" alt="Student">
+              {% elif user.is_trainer and user.trainerprofile.profile_pic %}
+                <img src="{{ user.trainerprofile.profile_pic.url }}" class="rounded-circle me-2" width="32" height="32" alt="Trainer">
+              {% else %}
+                <i class="bi bi-person-circle me-2" style="font-size: 1.4rem;"></i>
+              {% endif %}
+  
+              {{ user.username }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+  
+              {% if user.is_student %}
+                <li><a class="dropdown-item" href="{% url 'edit_student_profile' %}"><i class="bi bi-person-lines-fill me-2"></i> Edit Profile</a></li>
+                <li><a class="dropdown-item" href="{% url 'student_password_change' %}"><i class="bi bi-key me-2"></i> Change Password</a></li>
+              {% elif user.is_trainer %}
+                <li><a class="dropdown-item" href="{% url 'edit_trainer_profile' %}"><i class="bi bi-pencil-square me-2"></i> Edit Profile</a></li>
+              {% endif %}
+  
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+            </ul>
+          </li>
+          {% endif %}
+  
+        </ul>
+      </div>
+    </div>
+  </nav>
+  

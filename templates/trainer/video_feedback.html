@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Video Feedback{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Student Feedback on Your Videos</h2>
+
+    {% if video_data %}
+        {% for data in video_data %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <strong>{{ data.video.title }}</strong>
+                    <span class="text-white-50 small">
+                        Avg Rating:
+                        {% if data.avg %}
+                            {% with avg=data.avg|floatformat:1 %}
+                                {% for i in "12345"|make_list %}
+                                    {% if avg >= forloop.counter %}
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                    {% elif avg >= forloop.counter|add:"-0.5" %}
+                                        <i class="bi bi-star-half text-warning"></i>
+                                    {% else %}
+                                        <i class="bi bi-star text-warning"></i>
+                                    {% endif %}
+                                {% endfor %}
+                                <small>({{ avg }})</small>
+                            {% endwith %}
+                        {% else %}
+                            <span class="text-light">Not rated</span>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="card-body">
+                    {% if data.feedbacks %}
+                        <ul class="list-group">
+                            {% for fb in data.feedbacks %}
+                                <li class="list-group-item">
+                                    <strong>{{ fb.student.username }}</strong><br>
+                                    <span class="text-warning">
+                                        {% for i in "12345"|make_list %}
+                                            {% if fb.rating >= forloop.counter %}
+                                                <i class="bi bi-star-fill"></i>
+                                            {% else %}
+                                                <i class="bi bi-star"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </span><br>
+                                    
+                                    <span>{{ fb.feedback|default:"No feedback" }}</span><br>
+                                    <small class="text-muted">{{ fb.created_at|date:"M d, Y H:i" }}</small>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted mt-2">No feedback yet for this video.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No videos uploaded yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
